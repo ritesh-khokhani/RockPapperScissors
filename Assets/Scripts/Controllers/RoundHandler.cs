@@ -8,7 +8,6 @@ public class RoundHandler : Singleton <RoundHandler>
 {
     bool isRoundActive = false;
     HandType playerHand;
-    IEnumerator timerCoroutine;
     UIGameplayView gameplayView;
     [SerializeField] Sprite []icons;
     internal float RoundDuration = 1f;
@@ -20,6 +19,12 @@ public class RoundHandler : Singleton <RoundHandler>
     void Start()
     {
         gameplayView = (UIGameplayView)UIHandler.Instance.GetView (ViewType.Gameplay);
+
+        TimerManager.OnTimerComplete += HandleTimerComplete;
+    }
+    void OnDestroy ()
+    {
+        TimerManager.OnTimerComplete -= HandleTimerComplete;
     }
 
     public void StartRound()
@@ -29,30 +34,10 @@ public class RoundHandler : Singleton <RoundHandler>
         isRoundActive = true;
         gameplayView.SetTimer(RoundDuration, RoundDuration);
 
-        if (timerCoroutine != null)
-        {
-            StopCoroutine(timerCoroutine);
-            timerCoroutine = null;
-        }
-        timerCoroutine = StartTimer(RoundDuration);
-        StartCoroutine (timerCoroutine);
-    }
-
-    IEnumerator StartTimer(float roundDuration)
-    {
-        float timeLeft = roundDuration;
-        while (timeLeft > 0f && isRoundActive)
-        {
-            timeLeft -= Time.deltaTime;
-            if (timeLeft < 0f) 
-                timeLeft = 0f;
-
-            gameplayView.SetTimer(timeLeft, roundDuration);
-
-            yield return null;
-        }
-
-        OnTimerComplete();
+        TimerManager.Instance.StopTimer ();
+        TimerManager.Instance.StartTimer (RoundDuration, (float timeLeft) => {
+            gameplayView.SetTimer(timeLeft, RoundDuration);
+        });
     }
 
     public void SelectHand(HandType handType)
@@ -60,11 +45,7 @@ public class RoundHandler : Singleton <RoundHandler>
         if (!isRoundActive) 
             return;
 
-        if (timerCoroutine != null)
-        {
-            StopCoroutine(timerCoroutine);
-            timerCoroutine = null;
-        }
+        TimerManager.Instance.StopTimer ();
 
         playerHand = handType;
         isRoundActive = false;
@@ -72,7 +53,7 @@ public class RoundHandler : Singleton <RoundHandler>
         EvaluateRound();
     }
 
-    void OnTimerComplete()
+    void HandleTimerComplete()
     {
         if (!isRoundActive) 
             return;
