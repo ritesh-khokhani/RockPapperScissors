@@ -11,8 +11,6 @@ public class UIGameplayView : UIView
     [SerializeField] Image timerFill;
     [SerializeField] Sprite defaultIcon;
 
-    // public Image TimerFill => timerFill;
-
     void OnEnable() 
     {
         SetAIHandText ("AI Hand", null);

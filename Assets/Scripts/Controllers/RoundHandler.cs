@@ -7,14 +7,15 @@ using DG.Tweening;
 public class RoundHandler : Singleton <RoundHandler>
 {
     bool isRoundActive = false;
-    HandType playerHand;
+    Hand playerHand;
     UIGameplayView gameplayView;
-    [SerializeField] Sprite []icons;
+    [SerializeField] RulesData rulesData;
+
     internal float RoundDuration = 1f;
     const float END_DELAY = 1f;
 
     public static event Action OnRoundStart;
-    public static event Action<ResultType, HandType, HandType> OnRoundEnd;
+    public static event Action<ResultType, Hand, Hand> OnRoundEnd;
 
     void Start()
     {
@@ -40,14 +41,14 @@ public class RoundHandler : Singleton <RoundHandler>
         });
     }
 
-    public void SelectHand(HandType handType)
+    public void SelectHand(Hand hand)
     {
         if (!isRoundActive) 
             return;
 
         TimerManager.Instance.StopTimer ();
 
-        playerHand = handType;
+        playerHand = hand;
         isRoundActive = false;
 
         EvaluateRound();
@@ -64,16 +65,17 @@ public class RoundHandler : Singleton <RoundHandler>
 
     void EvaluateRound()
     {
-        HandType aiHand = AIHandler.GetRandomHand();
-        gameplayView.SetAIHandText (aiHand.ToString (), icons[(int)aiHand]);
+        Hand aiHand = AIHandler.Instance.GetRandomHand();
+        gameplayView.SetAIHandText(aiHand.HandName, aiHand.Icon);
 
-        int resultValue = Rules.RulesMatrix[(int)playerHand, (int)aiHand];
-        ResultType resultType = (ResultType)resultValue;
+        // int resultValue = Rules.RulesMatrix[(int)playerHand, (int)aiHand];
+        ResultType result = rulesData.GetResult(playerHand, aiHand);
+        // ResultType resultType = (ResultType)resultValue;
 
-        NotifyRoundEnd(resultType, playerHand, aiHand);
+        NotifyRoundEnd(result, playerHand, aiHand);
     }
 
-    void NotifyRoundEnd(ResultType result, HandType playerHand = HandType.Rock, HandType aiHand = HandType.Rock)
+    void NotifyRoundEnd(ResultType result, Hand playerHand = null, Hand aiHand = null)
     {
         DOVirtual.DelayedCall (END_DELAY, ()=> {
            OnRoundEnd?.Invoke(result, playerHand, aiHand);

@@ -5,15 +5,23 @@ using UnityEngine.UI;
 
 public class UIHandButton : MonoBehaviour
 {
-    [SerializeField] HandType hand;
     [SerializeField] Button handButton;
     [SerializeField] Text handTxt;
+    [SerializeField] Image handIcon;
 
+    Hand hand;
+    
     void Start()
     {
-        handTxt.text = $"{hand}";
-
         handButton.onClick.AddListener (OnHandlSelected);
+    }
+
+    public void SetHand (Hand hand)
+    {
+        this.hand = hand;
+
+        handTxt.text = hand.HandName;
+        handIcon.sprite = hand.Icon;
     }
 
     void OnHandlSelected ()

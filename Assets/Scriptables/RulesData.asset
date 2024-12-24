@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1bf54378905d420eb20536a33fbb7b3, type: 3}
+  m_Name: RulesData
+  m_EditorClassIdentifier: 
+  hands:
+  - HandType: 0
+    HandName: Rock
+    Icon: {fileID: 21300000, guid: 2552ad76df7e64817adb949388141ca2, type: 3}
+    Defeats: 0200000003000000
+  - HandType: 1
+    HandName: Paper
+    Icon: {fileID: 21300000, guid: 06e58636987e54d32be3fb92e92fcdbb, type: 3}
+    Defeats: 0400000000000000
+  - HandType: 2
+    HandName: Scissors
+    Icon: {fileID: 21300000, guid: 7bdb7977b43da41ae9e1f2587174c1af, type: 3}
+    Defeats: 0100000003000000
+  - HandType: 3
+    HandName: Lizard
+    Icon: {fileID: 21300000, guid: 0421e5c7057444c96a781f075f56156e, type: 3}
+    Defeats: 0100000004000000
+  - HandType: 4
+    HandName: Spock
+    Icon: {fileID: 21300000, guid: b30a7f45cef9e4f38ad2bce92fc3bf63, type: 3}
+    Defeats: 0000000002000000

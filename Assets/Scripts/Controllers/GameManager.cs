@@ -29,7 +29,7 @@ public class GameManager : Singleton <GameManager>
         RoundHandler.Instance.StartRound();
     }
 
-    void HandleRoundEnd(ResultType result, HandType playerHand, HandType aiHand)
+    void HandleRoundEnd(ResultType result, Hand playerHand, Hand aiHand)
     {
         switch(result)
         {
